@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto'
 import http from 'node:http'
 
 const users = []
@@ -9,6 +10,7 @@ const server = http.createServer((req, res)=> {
 
 // Cabeçalhos = mostram como o dado pode ser interpretado
 const {method, url} = req
+
 if(method === 'GET' && url ==='/users') {
     //RETORNO A CONSTANTE USERS NO GET
     return res.setHeader('Content-type', 'application/json') // aqui estou falando que o tipo do conteudo da requisição ou da repsosta é tipo aplicação em JSON
@@ -18,7 +20,7 @@ if(method === 'GET' && url ==='/users') {
 if(method === 'POST' && url ==="/users") {
 // CRIANDO USUARIOS:
 users.push({
-    id:1,
+    id:randomUUID(),
     name:'Jhon Doe',
     email:'jhondoe@example.com'
 })
