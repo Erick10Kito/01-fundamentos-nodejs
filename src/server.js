@@ -1,25 +1,27 @@
 import http from 'node:http'
 
-// Criando primeiro servidor http:
+const users = []
 const server = http.createServer((req, res)=> {
 
 
-// GET => Buscar um recurso no back-end
-//POST => Criar um recurso no back-end
-//PUT => Atualizar um recurso no back-end
-//PATCH => Atualizar uma informação especifica de um recurso no back-end
-//DELETE => Deletar um recurso do back-end
+//Stateful = SALVA EM MEMORIA
+//Stateless = NÃO SALVA EM MEMORIA
 
-
-//GET /users => Buscando usuarios no back-end
-//POST /users => Criando usuarios no back-end
-const {method, url} = req // as requisições http precisam dessas duas informações(method, url)
+// Cabeçalhos = mostram como o dado pode ser interpretado
+const {method, url} = req
 if(method === 'GET' && url ==='/users') {
-    return res.end('Listagem de Usuarios')
+    //RETORNO A CONSTANTE USERS NO GET
+    return res.setHeader('Content-type', 'application/json') // aqui estou falando que o tipo do conteudo da requisição ou da repsosta é tipo aplicação em JSON
+    .end(JSON.stringify(users))
 }
 
 if(method === 'POST' && url ==="/users") {
-    return res.end("Criação de usuarios")
+// CRIANDO USUARIOS:
+users.push({
+    id:1,
+    name:'Jhon Doe',
+    email:'jhondoe@example.com'
+})
 }
 return res.end("HELLO")
 
