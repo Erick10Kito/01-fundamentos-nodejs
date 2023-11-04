@@ -4,11 +4,6 @@ import http from 'node:http'
 const users = []
 const server = http.createServer((req, res)=> {
 
-
-//Stateful = SALVA EM MEMORIA
-//Stateless = NÃO SALVA EM MEMORIA
-
-// Cabeçalhos = mostram como o dado pode ser interpretado
 const {method, url} = req
 
 if(method === 'GET' && url ==='/users') {
@@ -18,15 +13,17 @@ if(method === 'GET' && url ==='/users') {
 }
 
 if(method === 'POST' && url ==="/users") {
-// CRIANDO USUARIOS:
+// CRIANDO USUARIOS:    
 users.push({
     id:randomUUID(),
-    name:'Jhon Doe',
+    name:'Erick Campos',
     email:'jhondoe@example.com'
 })
+//Retornando um status Code de criação de sucesso
+return res.writeHead(201).end()
 }
-return res.end("HELLO")
-
+//Retornando um status Code de erro de notFound
+return res.writeHead(404).end()
 })
 
 
