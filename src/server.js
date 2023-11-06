@@ -1,26 +1,17 @@
 import { randomUUID } from 'node:crypto'
 import http from 'node:http'
+import { json } from './middlewares/json.js'
 
 const users = []
 const server = http.createServer(async(req, res)=> {
 
 const {method, url} = req
-const buffers = []
 
-for await (const chunk of req) { 
-buffers.push(chunk)
-}
-try { // ira tentar executar o codigo dentro das chaves
-  req.body = JSON.parse(Buffer.concat(buffers).toString()); // vai pegar os dados que estão sendo postados no servidor atraves de um post do Insonmia
-
-} catch { // caso de erro ele executa o que esta dentro das chaves do catch
-req.body = null
-}
-//LEMBRANDO QUE COM O REQ.BODY EU CRIEI UMA NOVA PROPRIEDADE CHAMADA BODY DENTRO DO REQ 
+await json(req, res)
 
 if(method === 'GET' && url ==='/users') {
     //RETORNO A CONSTANTE USERS NO GET
-    return res.setHeader('Content-type', 'application/json')
+    return res
     .end(JSON.stringify(users))
 }
 
