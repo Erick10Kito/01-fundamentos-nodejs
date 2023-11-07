@@ -1,8 +1,9 @@
 import { randomUUID } from 'node:crypto'
 import http from 'node:http'
 import { json } from './middlewares/json.js'
-
-const users = []
+import { Database } from './database.js'
+// Agora com o database criado irei coloca-lo para funcionar no meu servidor:
+const database = new Database()
 const server = http.createServer(async(req, res)=> {
 
 const {method, url} = req
@@ -10,22 +11,23 @@ const {method, url} = req
 await json(req, res)
 
 if(method === 'GET' && url ==='/users') {
-    //RETORNO A CONSTANTE USERS NO GET
-    return res
-    .end(JSON.stringify(users))
+const users = database.select("users") // para listar eu pego o que tem dentro da tabela cujo nome eu passei, nesse caso é users
+    return res.end(JSON.stringify(users))
 }
 
 if(method === 'POST' && url ==="/users") {
     //Desestruturação do body para pegar o nome e email que estão vindo do Insonmia:
     const {name, email} = req.body
 // CRIANDO USUARIOS:    
-users.push({
+const user = { 
     id:randomUUID(),
     name, 
     email
-    //tirei o valor de Nome e email pois o insonmia ja vai dar esse valor para nos
-})
-//Retornando um status Code de criação de sucesso
+
+}
+
+database.insert("users", user) //Agora passo no inserto o nome da tabela e a informação que vou inserir como dado dessa tabela  
+
 return res.writeHead(201).end()
 }
 //Retornando um status Code de erro de notFound
